@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PneumoScan AI | Multimodal Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <div class="app-container">
+        <header class="main-header">
+            <div class="logo-area">
+                <i class="fas fa-lungs-virus fa-2x pulse-icon"></i>
+                <div>
+                    <h1>PneumoScan<span>AI</span></h1>
+                    <p>ResNet50 + CLIP Semantic Fusion Engine</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="status-pill"><span class="dot"></span> System Online</div>
+                <button onclick="logout()" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </button>
+            </div>
+        </header>
+
+        <main class="dashboard-center">
+            
+            <!-- LEFT COLUMN: Upload + Controls -->
+            <div class="left-col">
+                <div class="glass-card upload-section">
+                    <div class="card-header"><i class="fas fa-file-medical-alt"></i> Patient Scan Input</div>
+                    
+                    <div class="drop-zone" id="drop-zone">
+                        <div class="drop-content">
+                            <i class="fas fa-cloud-upload-alt fa-4x"></i>
+                            <h3>Drag & Drop Chest X-Ray</h3>
+                            <p>or <span class="browse-link">Browse Files</span></p>
+                            <p class="file-hint">Supports JPEG, PNG (Max 10MB)</p>
+                        </div>
+                        <input type="file" id="file-input" hidden accept="image/*">
+                        
+                        <div id="preview-container" class="hidden">
+                            <img id="image-preview" src="" alt="X-ray Preview">
+                            <div id="loading-overlay" class="hidden">
+                                <div class="loader"></div>
+                                <p id="loading-text">Initializing...</p>
+                            </div>
+                            <div id="blur-warning" class="hidden">
+                                <i class="fas fa-exclamation-triangle"></i> High Blur Detected
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls Area (Outside Card) -->
+                <div id="controls-area" class="controls-container hidden">
+                    <input type="text" id="patient-name" placeholder="Enter Patient Name (Optional)" class="glass-input">
+                    <!-- REMOVED EMAIL INPUT -->
+                    <button id="start-analysis-btn" class="glow-btn">
+                        <i class="fas fa-play"></i> Start Analysis
+                    </button>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Results -->
+            <div class="glass-card results-section hidden" id="results-card">
+                <div class="card-header"><i class="fas fa-microscope"></i> AI Diagnosis</div>
+                
+                <div class="result-body">
+                    <div class="prediction-main">
+                        <span class="sub-label">DETECTED CONDITION</span>
+                        <h2 id="pred-label">--</h2>
+                        <p id="patient-display" class="patient-id-display">Patient: --</p>
+                    </div>
+
+                    <div class="confidence-meter">
+                        <div class="meter-header">
+                            <span>AI Confidence</span>
+                            <span id="conf-val">0%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="conf-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="meta-data">
+                        <div class="meta-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div><span class="label">Sharpness Score</span><span class="value" id="sharp-val">--</span></div>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <div><span class="label">Analysis Time</span><span class="value" id="time-val">--s</span></div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons-row">
+                        <button id="download-btn" class="small-action-btn download">
+                            <i class="fas fa-file-download"></i> Report
+                        </button>
+                        <button onclick="clearDiagnosis()" class="small-action-btn clear">
+                            <i class="fas fa-redo"></i> Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        
+        <footer><p>Disclaimer: Decision support tool only. Consult a radiologist.</p></footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        function clearDiagnosis() {
+            document.getElementById('results-card').classList.add('hidden');
+            document.getElementById('preview-container').classList.add('hidden');
+            document.querySelector('.drop-content').classList.remove('hidden');
+            document.getElementById('file-input').value = "";
+            
+            document.getElementById('patient-name').value = "";
+            // REMOVED EMAIL CLEAR LOGIC
+            document.getElementById('controls-area').classList.add('hidden');
+        }
+
+        function logout() {
+            window.location.href = "/";
+        }
+    </script>
+</body>
+</html>

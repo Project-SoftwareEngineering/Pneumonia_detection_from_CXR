@@ -1,0 +1,10 @@
+flask
+torch
+torchvision
+opencv-python
+numpy
+ftfy
+regex
+tqdm
+fpdf
+git+https://github.com/openai/CLIP.git

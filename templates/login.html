@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PneumoScan AI | Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="glass-card login-card">
+            <div class="login-header">
+                <i class="fas fa-lungs-virus fa-3x pulse-icon"></i>
+                <h1>PneumoScan<span>AI</span></h1>
+                <p>Authorized Access Only</p>
+            </div>
+            
+            <form id="login-form" class="login-form">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="username" placeholder="Username" class="glass-input" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="Password" class="glass-input" required>
+                </div>
+                
+                <div class="login-actions">
+                    <button type="submit" class="glow-btn login-btn-margin">Secure Login</button>
+                    <button type="button" id="signup-btn" class="glow-btn btn-secondary login-btn-margin">Sign Up (Dummy)</button>
+                </div>
+            </form>
+            
+            <p id="login-error" class="error-msg hidden">Invalid Credentials</p>
+            <p id="signup-msg" class="success-msg hidden">Account Created! Use: user / pass</p>
+        </div>
+    </div>
+
+    <script>
+        // Login Logic
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const errorMsg = document.getElementById('login-error');
+            const successMsg = document.getElementById('signup-msg');
+
+            // Hardcoded Credentials (Admin + New User)
+            if ((user === "admin" && pass === "admin123") || (user === "user" && pass === "pass")) {
+                window.location.href = "/dashboard";
+            } else {
+                errorMsg.classList.remove('hidden');
+                successMsg.classList.add('hidden');
+                
+                // Shake animation
+                document.querySelector('.login-card').classList.add('shake');
+                setTimeout(() => document.querySelector('.login-card').classList.remove('shake'), 500);
+            }
+        });
+
+        // Signup Logic (Dummy)
+        document.getElementById('signup-btn').addEventListener('click', () => {
+            const successMsg = document.getElementById('signup-msg');
+            const errorMsg = document.getElementById('login-error');
+            
+            // Simulate account creation
+            successMsg.classList.remove('hidden');
+            errorMsg.classList.add('hidden');
+            
+            // Pre-fill fields for convenience
+            document.getElementById('username').value = "user";
+            document.getElementById('password').value = "pass";
+        });
+    </script>
+</body>
+</html>
